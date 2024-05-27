@@ -1,4 +1,4 @@
-CREATE USER cliniqueu WITH PASSWORD 'clinique';
+CREATE USER cliniqueu WITH PASSWORD 'clin';
 CREATE DATABASE clinique;
 GRANT ALL PRIVILEGES ON DATABASE clinique TO cliniqueu;
 
@@ -37,7 +37,7 @@ CREATE TABLE paiement_acte (
     id_utilisateur INT REFERENCES utilisateur(id_utilisateur),
     id_patient INT REFERENCES patient(id_patient),
     id_acte_depense INT REFERENCES acte_depense(id_acte_depense),
-    prix DOUBLE PRECISION
+    prix DOUBLE PRECISION,
     date_paiement_acte DATE
 );
 
@@ -45,6 +45,6 @@ CREATE TABLE paiement_depense(
     id_paiement_depense SERIAL PRIMARY KEY,
     id_utilisateur INT REFERENCES utilisateur(id_utilisateur),
     id_acte_depense INT REFERENCES acte_depense(id_acte_depense),
-    montant DOUBLE PRECISON,
+    montant DOUBLE PRECISION,
     date_paiement_depense DATE
 );
