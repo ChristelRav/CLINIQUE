@@ -1,0 +1,31 @@
+utilisateur :
+-pseudo 
+-mot de passe 
+- type
+
+patient:
+-nom
+-dtn
+-genre
+-remboursement
+
+acte_depense:
+-code
+-nom
+-type
+
+budget_annuel:
+-id_acte_depense 
+-annee
+-montant
+
+paiement_acte:
+-id_patient
+-id_acte_depense
+-prix
+-date
+
+paiement_depense:
+-id_acte_depense
+-montant
+-date
