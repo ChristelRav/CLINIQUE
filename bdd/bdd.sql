@@ -16,18 +16,20 @@ CREATE TABLE patient (
     nom VARCHAR(255) DEFAULT 'RAZANAKOTO VOAY',
     date_naissance DATE,
     genre INT DEFAULT 1,
-    remboursement BOOLEAN
+    remboursement BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE acte_depense (
     id_acte_depense SERIAL PRIMARY KEY,
     code VARCHAR(255),
     nom VARCHAR(255) DEFAULT 'ACTE_DEPENSE',
+    budget DOUBLE PRECISION,
     type INT
 );
 
 CREATE TABLE budget_annuel (
     id_budget_annuel SERIAL PRIMARY KEY,
+    id_acte_depense INT REFERENCES acte_depense(id_acte_depense),
     montant DOUBLE PRECISION,
     annee INT
 );
@@ -38,7 +40,7 @@ CREATE TABLE paiement_acte (
     id_patient INT REFERENCES patient(id_patient),
     id_acte_depense INT REFERENCES acte_depense(id_acte_depense),
     prix DOUBLE PRECISION,
-    date_paiement_acte DATE
+    date_paiement_acte DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE paiement_depense(
@@ -46,5 +48,5 @@ CREATE TABLE paiement_depense(
     id_utilisateur INT REFERENCES utilisateur(id_utilisateur),
     id_acte_depense INT REFERENCES acte_depense(id_acte_depense),
     montant DOUBLE PRECISION,
-    date_paiement_depense DATE
+    date_paiement_depense DATE DEFAULT CURRENT_DATE
 );

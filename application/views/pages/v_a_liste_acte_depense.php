@@ -1,54 +1,53 @@
-
+<?php if (!isset($acte)) $acte = array(); ?>   
+<?php if (!isset($depense)) $depense = array(); ?> 
+<link rel="stylesheet" href="<?php echo base_url("assets/css/popup.css"); ?>" >
 <div class="content-wrapper">
     <div class="row">
-    <div class="col-lg-6 grid-margin stretch-card">
+            <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Basic Table</h4>
+                  <h4 class="card-title">Insertion Acte_depense</h4>
+                  <form class="form-inline" action="<?php echo site_url('CTA_Acte_Depense/save_AD')?>"  method="POST">
+                    <label class="sr-only" for="inlineFormInputName2">Name</label>
+                    <p><input type="text" name="code" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="code">
+                    <input type="text" name="nom" class="form-control mb-2 mr-sm-2" id="inlineFormInputGroupUsername2" placeholder="Designation"></p>
+                    <p><input type="number" name="budget" min="0" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="budget">
+                    <select class="form-control mb-2 mr-sm-2" name="type">
+                          <option value="1">Acte</option>
+                          <option value="5">Dépense</option>
+                    </select></p>
+                    <p><button type="submit" class="btn btn-info mb-2">Submit</button></p>
+                  </form>
+                </div>
+              </div>
+            </div>
+    </div>
+    <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Liste des types actes</h4>
                   <p class="card-description">
-                    Add class <code>.table</code>
+                    Liste <code>.ACTE</code>
                   </p>
                   <div class="table-responsive">
                     <table class="table">
                       <thead>
                         <tr>
-                          <th>Profile</th>
-                          <th>VatNo.</th>
-                          <th>Created</th>
-                          <th>Status</th>
+                          <th>Code.</th>
+                          <th>Désignation</th>
+                          <th>Montant</th>
                         </tr>
                       </thead>
                       <tbody>
+                        <?php foreach ($acte as $a) { ?>
                         <tr>
-                          <td>Jacob</td>
-                          <td>53275531</td>
-                          <td>12 May 2017</td>
-                          <td><label class="badge badge-danger">Pending</label></td>
+                          <td><?php echo $a->code;?></td>
+                          <td><?php echo $a->nom;?></td>
+                          <td><?php echo number_format($a->budget,2,',',' ');?></td>
+                          <td><button type="submit" class="btn btn-warning mr-2"  href="javascript:void(0);" onclick="openPopupUPF(<?php echo htmlspecialchars(json_encode( $a)); ?>)">  <i class="mdi mdi-pencil mx-0"></i></button></td>
                         </tr>
-                        <tr>
-                          <td>Messsy</td>
-                          <td>53275532</td>
-                          <td>15 May 2017</td>
-                          <td><label class="badge badge-warning">In progress</label></td>
-                        </tr>
-                        <tr>
-                          <td>John</td>
-                          <td>53275533</td>
-                          <td>14 May 2017</td>
-                          <td><label class="badge badge-info">Fixed</label></td>
-                        </tr>
-                        <tr>
-                          <td>Peter</td>
-                          <td>53275534</td>
-                          <td>16 May 2017</td>
-                          <td><label class="badge badge-success">Completed</label></td>
-                        </tr>
-                        <tr>
-                          <td>Dave</td>
-                          <td>53275535</td>
-                          <td>20 May 2017</td>
-                          <td><label class="badge badge-warning">In progress</label></td>
-                        </tr>
+                        <?php } ?>
                       </tbody>
                     </table>
                   </div>
@@ -58,51 +57,29 @@
             <div class="col-lg-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Hoverable Table</h4>
+                  <h4 class="card-title">Liste des types dépenses</h4>
                   <p class="card-description">
-                    Add class <code>.table-hover</code>
+                    Liste <code>.DEPENSE</code>
                   </p>
                   <div class="table-responsive">
                     <table class="table ">
                       <thead>
                         <tr>
-                          <th>User</th>
-                          <th>Product</th>
-                          <th>Sale</th>
-                          <th>Status</th>
+                          <th>Code.</th>
+                          <th>Désignation</th>
+                          <th>Montant</th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody>
+                        <?php foreach ($depense as $d) { ?>
                         <tr>
-                          <td>Jacob</td>
-                          <td>Photoshop</td>
-                          <td class="text-danger"> 28.76% <i class="mdi mdi-arrow-down"></i></td>
-                          <td><label class="badge badge-danger">Pending</label></td>
+                          <td><?php echo $d->code;?></td>
+                          <td><?php echo $d->nom;?></td>
+                          <td><?php echo number_format($d->budget,2,',',' ');?></td>
+                          <td><a type="submit" class="btn btn-warning mr-2" href="javascript:void(0);" onclick="openPopup(<?php echo htmlspecialchars(json_encode( $d)); ?>)"> <i class="mdi mdi-pencil mx-0"></i></a></td>
                         </tr>
-                        <tr>
-                          <td>Messsy</td>
-                          <td>Flash</td>
-                          <td class="text-danger"> 21.06% <i class="mdi mdi-arrow-down"></i></td>
-                          <td><label class="badge badge-warning">In progress</label></td>
-                        </tr>
-                        <tr>
-                          <td>John</td>
-                          <td>Premier</td>
-                          <td class="text-danger"> 35.00% <i class="mdi mdi-arrow-down"></i></td>
-                          <td><label class="badge badge-info">Fixed</label></td>
-                        </tr>
-                        <tr>
-                          <td>Peter</td>
-                          <td>After effects</td>
-                          <td class="text-success"> 82.00% <i class="mdi mdi-arrow-up"></i></td>
-                          <td><label class="badge badge-success">Completed</label></td>
-                        </tr>
-                        <tr>
-                          <td>Dave</td>
-                          <td>53275535</td>
-                          <td class="text-success"> 98.05% <i class="mdi mdi-arrow-up"></i></td>
-                          <td><label class="badge badge-warning">In progress</label></td>
-                        </tr>
+                        <?php } ?>
                       </tbody>
                     </table>
                   </div>
@@ -111,3 +88,7 @@
             </div>
     </div>
 </div>
+
+          
+  <script src="<?php echo base_url("assets/js/popup.js"); ?>"></script>
+<?php $this->load->view('pages/v_a_popup_acte'); ?>
