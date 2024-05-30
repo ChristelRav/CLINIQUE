@@ -7,6 +7,8 @@ class CT_Depense extends CI_Controller {
         $this->load->model('MD_Patient');
         $this->load->model('MD_Acte_Depense');
         $this->load->model('MD_Paiement_Depense');
+        $this->load->model('MD_Import');
+        $this->load->model('MD_Csv');
     }
 	private function viewer($page,$data){
         $v = array(
@@ -16,11 +18,17 @@ class CT_Depense extends CI_Controller {
         $this->load->view('template/basepage',$v);
     }
 	public function index(){
-        $data['mois'] = array("janvier", "février", "mars","avril","mai","juin", "juillet","aout","septembre","octobre","novembre","décembre");
+        $data = array();
+        if ($this->input->get('erreur') != null) {
+            $data['erreur'] = explode(',', urldecode($this->input->get('erreur')));
+        } else if ($this->input->get('succes') != null) {
+            $data['succes'] = urldecode($this->input->get('succes'));
+        }
+        $data['mois'] = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "décembre");
         $data['depense'] = $this->MD_Acte_Depense->list_acte_depense(5);
         $data['list'] = $this->MD_Paiement_Depense->list_paiement_utilisateur($_SESSION['user'][0]['id_utilisateur']);
-        $this->viewer('v_saisie_depense',$data);
-	}	
+        $this->viewer('v_saisie_depense', $data);
+    }    
     public function inserer_depense(){
         $an = $_POST['an']; $depense = $_POST['depense']; $montant = $_POST['montant'];
         $mois = $_POST['mois']; $j = $_POST['jour'];
@@ -34,16 +42,35 @@ class CT_Depense extends CI_Controller {
         redirect('CT_Depense');
     }
     public function import_csv(){
-        if (isset($_FILES['csv_file']['name']) && $_FILES['csv_file']['name'] != '') {
-            $path = $_FILES['csv_file']['tmp_name'];
-            $file = fopen($path, 'r');
-            $csv_data = [];
-            while (($line = fgetcsv($file, 1000, ',')) !== FALSE) {
-                echo $line[0].' -- '.$line[1].' -- '.$line[2].'<br>';
+        $resultat_import = $this->MD_Import->read('csv_file');
+        //var_dump($resultat_import['erreur']);
+    
+        // Vérifier si $resultat_import['erreur'] contient des erreurs valides
+        $hasErrors = false;
+        foreach ($resultat_import['erreur'] as $ligne => $erreurs) {
+            if (!empty($erreurs)) {
+                $hasErrors = true;
+                break;
             }
-            fclose($file);
+        }
+    
+        if ($hasErrors) {
+            foreach ($resultat_import['erreur'] as $ligne => $erreurs) {
+                foreach ($erreurs as $erreur) {
+                    echo "Erreur à la ligne $ligne : $erreur <br>";
+                }
+            }
+            $e = $this->MD_Import->tab_Erreur($resultat_import);
+            $d = implode(',', $e);
+            echo "KKKKKKKKKKKKKKKKKKKKKKKK";
+            redirect('CT_Depense/index?erreur=' . urlencode($d));
         } else {
-            $this->session->set_flashdata('message', 'Veuillez sélectionner un fichier CSV.');
+            echo "TTTTTTTTTTTTTTTTTTTT";
+            $data['succes'] = 'Données traitées correctement';
+            redirect('CT_Depense/index?succes=' . urlencode($data['succes']));
         }
     }
+    
+    
+    
 }

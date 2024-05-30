@@ -4,7 +4,29 @@
 <?php if (!isset($list)) $list = array(); ?> 
 <div class="content-wrapper">
     <div class="row">
-    <div class="col-12 grid-margin stretch-card">
+        <div class="col-12 ">
+          <?php if (isset($data['erreur']) && count($data['erreur']) > 0) { ?>
+                  <div class="alert alert-danger alert-dismissible fade show"  role="alert">
+                    <strong>Error!</strong>
+                    <?php  foreach ($data['erreur'] as $erreur) {?>
+                        <p><?= $erreur; ?></p>
+                    <?php } ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+          <?php }   else if (isset($succes)) {?> 
+            <div class="alert alert-success alert-dismissible fade show"  role="alert">
+                    <strong>Succes!</strong> <?php echo $succes; ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+          <?php } ?>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">CSV Dépense</h4>
